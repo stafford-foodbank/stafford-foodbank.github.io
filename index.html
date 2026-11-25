@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stafford Foodbank Sign Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: warm, calm, plain-spoken — someone in crisis must finish this easily on a phone.
+   IDEA: the paper Stafford Foodbank sign-up sheet, rebuilt as one calm column.
+   PICTURE: the form itself, sectioned like the paper, with a real signature pad.
+   COLOUR and TYPE: deep leaf green + apple red accent on white; Barlow Condensed wordmark, Figtree body.
+   LAYOUT: one 680px column, numbered-by-heading sections, sticky submit at the end. */
+:root{color-scheme:light dark;
+  --bg:light-dark(#f4f6f2,#0f1712);--card:light-dark(#ffffff,#17221b);--ink:light-dark(#16241b,#e8efe9);
+  --muted:light-dark(#5b6b60,#9fb0a4);--line:light-dark(#d6ddd5,#2c3b31);--green:light-dark(#1d5a3a,#7fd1a2);
+  --greenbg:light-dark(#e6f1ea,#1c3326);--red:light-dark(#d8452a,#ff8a6e);--redbg:light-dark(#fdecE7,#3a1d16);
+  --field:light-dark(#ffffff,#101a14)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+header{background:var(--green);color:light-dark(#fff,#0f1712);padding:28px max(5vw,16px) 64px}
+.brand{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.brand svg{flex:none;width:58px;height:58px}
+.word{font:800 34px/0.95 "Barlow Condensed",sans-serif;letter-spacing:.5px}
+.word small{display:block;font:600 15px/1.4 Figtree,sans-serif;opacity:.85;letter-spacing:0;margin-top:6px}
+main{max-width:680px;margin:-40px auto 0;padding:0 12px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px clamp(16px,4vw,28px);margin-bottom:14px}
+h1{font:800 32px/1.05 "Barlow Condensed",sans-serif;margin:0 0 6px;text-wrap:balance}
+h2{font-size:19px;margin:0 0 14px;display:flex;gap:10px;align-items:center}
+h2 span{flex:none;width:28px;height:28px;border-radius:50%;background:var(--greenbg);color:var(--green);display:grid;place-items:center;font-size:14px}
+.lead{color:var(--muted);margin:0}
+.req-note{margin-top:12px;font-size:14px;color:var(--muted)}
+label,.lab{display:block;font-weight:600;margin:14px 0 6px}
+.hint{display:block;font-weight:400;color:var(--muted);font-size:14px}
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],textarea{
+  width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1.5px solid var(--line);
+  border-radius:10px;padding:11px 12px;min-height:46px}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus,button:focus-visible,.opt input:focus-visible+span{outline:3px solid light-dark(#9ccfb0,#2f6b49);outline-offset:1px;border-color:var(--green)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 14px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.opt{position:relative;margin:0}
+.opt input{position:absolute;opacity:0}
+.opt span{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;font-weight:500;background:var(--field)}
+.opt span::before{content:"";flex:none;width:18px;height:18px;border:2px solid var(--muted);border-radius:50%}
+.opt input[type=checkbox]+span::before{border-radius:5px}
+.opt input:checked+span{border-color:var(--green);background:var(--greenbg)}
+.opt input:checked+span::before{border-color:var(--green);background:var(--green);box-shadow:inset 0 0 0 3px var(--greenbg)}
+.counts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.count{border:1.5px solid var(--line);border-radius:10px;padding:10px;background:var(--field)}
+.count .lab{margin:0 0 6px;font-size:15px}
+.step{display:flex;align-items:center;gap:6px}
+.step button{flex:none;width:44px;height:44px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:700 20px Figtree,sans-serif;cursor:pointer}
+.step input{text-align:center;padding:8px 4px}
+.total{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--greenbg);color:var(--green);font-weight:700}
+.important{border-color:var(--red)}
+.important h2 span{background:var(--redbg);color:var(--red)}
+.flag{display:inline-block;background:var(--redbg);color:var(--red);font-weight:700;font-size:13px;padding:2px 8px;border-radius:6px;margin-left:6px}
+.reveal{display:none}.reveal.on{display:block}
+ol.rules{margin:0;padding-left:22px}ol.rules li{margin-bottom:8px}
+.rules-box{background:var(--bg);border-radius:10px;padding:14px 16px;font-size:15px}
+.sigwrap{position:relative;border:1.5px dashed var(--muted);border-radius:10px;background:#fff;height:170px;touch-action:none}
+.sigwrap canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:10px;cursor:crosshair}
+.sigwrap .ph{position:absolute;left:14px;bottom:30px;right:14px;border-bottom:1.5px solid #c7cec8;color:#9aa39c;font-size:14px;pointer-events:none}
+.sigbar{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:14px;color:var(--muted)}
+.link{background:none;border:0;color:var(--green);font:600 15px Figtree,sans-serif;cursor:pointer;min-height:44px;padding:0 4px}
+.err{display:none;color:var(--red);font-size:14px;font-weight:600;margin-top:6px}
+.bad .err{display:block}
+.bad input,.bad textarea,.bad .opt span,.bad .sigwrap{border-color:var(--red)}
+.submit{width:100%;min-height:56px;border:0;border-radius:12px;background:var(--red);color:#fff;font:700 18px Figtree,sans-serif;cursor:pointer}
+.submit:disabled{opacity:.6;cursor:wait}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.banner{display:none;padding:12px 14px;border-radius:10px;background:var(--redbg);color:var(--red);font-weight:600;margin-bottom:14px}
+.done{text-align:center;padding:36px 20px}
+.done svg{width:72px;height:72px}
+.ref{display:inline-block;font:800 26px "Barlow Condensed",sans-serif;letter-spacing:1px;background:var(--greenbg);color:var(--green);padding:6px 16px;border-radius:10px;margin:10px 0}
+.foot{text-align:center;color:var(--muted);font-size:13px;margin-top:18px}
+.demo{background:light-dark(#fff6d9,#33290c);color:light-dark(#6b5300,#f3d27a);font-size:14px;padding:8px 12px;border-radius:10px;margin-bottom:14px;display:none}
+@media(max-width:520px){.row{grid-template-columns:minmax(0,1fr)}.word{font-size:29px}h1{font-size:28px}}
+@media(prefers-reduced-motion:no-preference){.card{animation:up .35s ease both}@keyframes up{from{opacity:0;transform:translateY(8px)}}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="38" cy="38" r="20" fill="#e2522b"/><path d="M38 18c0-6 4-10 9-11-1 6-4 9-9 11z" fill="#9ee0b6"/><ellipse cx="18" cy="40" rx="11" ry="15" fill="#f4c542" transform="rotate(-20 18 40)"/><circle cx="31" cy="32" r="5" fill="#fff" opacity=".35"/></svg>
+    <div class="word">Stafford foodBANK<small>Emergency sign-up form</small></div>
+  </div>
+</header>
+
+<main id="app">
+  <div class="demo" id="demo">Preview mode — submissions are not saved here. Once deployed with Google Apps Script, each form goes to the Google Sheet and is emailed as a PDF.</div>
+
+  <form id="f" novalidate autocomplete="on">
+    <div class="card">
+      <h1>Emergency sign-up</h1>
+      <p class="lead">Please fill in every section so we can prepare the right food parcel for you and your family. It takes about 4 minutes.</p>
+      <p class="req-note">All fields are required unless marked <em>optional</em>.</p>
+    </div>
+
+    <div class="banner" id="topErr" role="alert">Please check the highlighted fields below.</div>
+
+    <section class="card">
+      <h2><span>1</span>Your details</h2>
+      <div class="field" data-f="name"><label for="name">Full name</label><input type="text" id="name" name="name" autocomplete="name" maxlength="120"><div class="err">Please enter your full name.</div></div>
+      <div class="field" data-f="address"><label for="address">Address</label><textarea id="address" name="address" autocomplete="street-address" maxlength="300" style="min-height:76px"></textarea><div class="err">Please enter your address.</div></div>
+      <div class="row">
+        <div class="field" data-f="postcode"><label for="postcode">Postcode</label><input type="text" id="postcode" name="postcode" autocomplete="postal-code" maxlength="9" style="text-transform:uppercase"><div class="err">Please enter a valid UK postcode, e.g. ST16 2AB.</div></div>
+        <div class="field" data-f="dob"><label for="dob">Date of birth</label><input type="date" id="dob" name="dob" autocomplete="bday"><div class="err">Please enter your date of birth.</div></div>
+      </div>
+      <div class="row">
+        <div class="field" data-f="phone"><label for="phone">Phone</label><input type="tel" id="phone" name="phone" autocomplete="tel" maxlength="20" inputmode="tel"><div class="err">Please enter a valid phone number.</div></div>
+        <div class="field" data-f="email"><label for="email">Email <span class="hint" style="display:inline">(optional)</span></label><input type="email" id="email" name="email" autocomplete="email" maxlength="120"><div class="err">That email address doesn't look right.</div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span>2</span>Your situation</h2>
+      <div class="field" data-f="crisis"><label for="crisis">Please tell us about the crisis you are in at this time<span class="hint">For example: benefits delayed, lost job, unexpected bill, waiting for asylum support.</span></label><textarea id="crisis" name="crisis" maxlength="1500"></textarea><div class="err">Please tell us briefly what has happened.</div></div>
+      <div class="field" data-f="status">
+        <span class="lab">Which applies to you? <span class="hint">Tick one</span></span>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="status" value="Employed – UC/CT"><span>Employed – UC/CT</span></label>
+          <label class="opt"><input type="radio" name="status" value="Retired – State Pension"><span>Retired – State Pension</span></label>
+          <label class="opt"><input type="radio" name="status" value="Student"><span>Student</span></label>
+          <label class="opt"><input type="radio" name="status" value="Unemployed – NESA/PIP/UC-LCWR"><span>Unemployed – NESA / PIP / UC-LCWR</span></label>
+          <label class="opt"><input type="radio" name="status" value="Other"><span>Other</span></label>
+        </div>
+        <div class="reveal" id="statusOtherBox"><label for="statusOther">Please specify</label><input type="text" id="statusOther" name="statusOther" maxlength="120"></div>
+        <div class="err">Please choose one option (and specify if "Other").</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span>3</span>Your household</h2>
+      <p class="lead">How many people live at your address, including you?</p>
+      <div class="field" data-f="household">
+        <div class="counts" style="margin-top:12px">
+          <div class="count"><span class="lab">Under 5</span><div class="step"><button type="button" data-d="-1" aria-label="Fewer under 5">−</button><input type="number" name="under5" min="0" max="20" value="0" inputmode="numeric" aria-label="Under 5"><button type="button" data-d="1" aria-label="More under 5">+</button></div></div>
+          <div class="count"><span class="lab">Under 10</span><div class="step"><button type="button" data-d="-1" aria-label="Fewer under 10">−</button><input type="number" name="under10" min="0" max="20" value="0" inputmode="numeric" aria-label="Under 10"><button type="button" data-d="1" aria-label="More under 10">+</button></div></div>
+          <div class="count"><span class="lab">Under 18</span><div class="step"><button type="button" data-d="-1" aria-label="Fewer under 18">−</button><input type="number" name="under18" min="0" max="20" value="0" inputmode="numeric" aria-label="Under 18"><button type="button" data-d="1" aria-label="More under 18">+</button></div></div>
+          <div class="count"><span class="lab">Adults 18+</span><div class="step"><button type="button" data-d="-1" aria-label="Fewer adults">−</button><input type="number" name="adults" min="0" max="20" value="1" inputmode="numeric" aria-label="Adults 18 and over"><button type="button" data-d="1" aria-label="More adults">+</button></div></div>
+        </div>
+        <div class="total" id="total">Total household: 1 person</div>
+        <div class="err">Please include at least one person.</div>
+      </div>
+      <div class="field" data-f="refugee">
+        <span class="lab">Is anyone in the household a refugee or asylum seeker?</span>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="refugee" value="No"><span>No</span></label>
+          <label class="opt"><input type="radio" name="refugee" value="Yes"><span>Yes</span></label>
+        </div>
+        <div class="reveal" id="refugeeBox"><label for="refugeeCount">How many people?</label><input type="number" id="refugeeCount" name="refugeeCount" min="1" max="20" inputmode="numeric" style="max-width:140px"></div>
+        <div class="err">Please answer Yes or No (and how many, if Yes).</div>
+      </div>
+    </section>
+
+    <section class="card important">
+      <h2><span>!</span>Allergies <span class="flag">Important</span></h2>
+      <div class="field" data-f="allergies">
+        <span class="lab">Are there any allergies in the family?</span>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="allergies" value="No"><span>No</span></label>
+          <label class="opt"><input type="radio" name="allergies" value="Yes"><span>Yes</span></label>
+        </div>
+        <div class="reveal" id="allergyBox"><label for="allergyDetails">Please give more information<span class="hint">Who is allergic, and to what (e.g. nuts, gluten, dairy).</span></label><textarea id="allergyDetails" name="allergyDetails" maxlength="800"></textarea></div>
+        <div class="err">Please answer Yes or No — and give details if Yes.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span>4</span>Other needs</h2>
+      <div class="field" data-f="hygiene">
+        <span class="lab">Do you need any hygiene products?</span>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="hygiene" value="No"><span>No</span></label>
+          <label class="opt"><input type="radio" name="hygiene" value="Yes"><span>Yes</span></label>
+        </div>
+        <div class="reveal" id="hygieneBox"><label for="hygieneDetails">Which products? <span class="hint" style="display:inline">(optional)</span></label><input type="text" id="hygieneDetails" name="hygieneDetails" maxlength="300" placeholder="e.g. nappies, sanitary products, soap"></div>
+        <div class="err">Please answer Yes or No.</div>
+      </div>
+      <div class="field" data-f="pets">
+        <span class="lab">Do you have any pets?</span>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="pets" value="No"><span>No</span></label>
+          <label class="opt"><input type="radio" name="pets" value="Yes"><span>Yes</span></label>
+        </div>
+        <div class="reveal" id="petsBox"><label for="petDetails">What pets? <span class="hint" style="display:inline">(optional)</span></label><input type="text" id="petDetails" name="petDetails" maxlength="200" placeholder="e.g. 1 dog, 2 cats"></div>
+        <div class="err">Please answer Yes or No.</div>
+      </div>
+      <div class="field" data-f="further"><label for="further">Brief description for further information <span class="hint" style="display:inline">(optional)</span></label><textarea id="further" name="further" maxlength="1500"></textarea></div>
+    </section>
+
+    <section class="card">
+      <h2><span>5</span>Agreement and signature</h2>
+      <div class="rules-box">
+        <p style="margin-top:0">By signing this form, I agree to using the <strong>Stafford Emergency Foodbank</strong> and will move on to the <strong>Community Social Supermarket project</strong> when my crisis is over. I agree to engage with the project leaders for help and advice, so they can help me support my family and improve my situation. The rules are:</p>
+        <ol class="rules">
+          <li>In an emergency I will be issued with 1 single person or family food hamper, which will include evening meals, vegetables, fruit and other items needed for a week.</li>
+          <li>On the second visit, I agree to accept support from the organisers to help me change the circumstances behind my foodbank use, and work out how long I might need it for.</li>
+          <li>If a third visit is needed, a further plan will be put in place with an experienced local organiser at the Community Social Supermarket. A route to a personal solution will be explored, and other local services will be looked at, such as signposting to Citizens Advice.</li>
+          <li>We will only issue 6 foodbanks in 6 months unless there are extenuating circumstances.</li>
+        </ol>
+      </div>
+      <div class="field" data-f="agree" style="margin-top:12px">
+        <label class="opt"><input type="checkbox" name="agree" value="Yes"><span>I have read and agree to the rules above</span></label>
+        <div class="err">Please tick to agree.</div>
+      </div>
+      <div class="field" data-f="consent" style="margin-top:8px">
+        <label class="opt"><input type="checkbox" name="consent" value="Yes"><span>I agree that Stafford Foodbank may keep this information, including any allergy details, to provide food support and contact me about it</span></label>
+        <div class="err">We need your consent to process your request.</div>
+      </div>
+      <div class="field" data-f="signature">
+        <span class="lab">Signature <span class="hint">Sign with your finger or mouse</span></span>
+        <div class="sigwrap" id="sigwrap"><div class="ph">✕</div><canvas id="sig" aria-label="Signature pad"></canvas></div>
+        <div class="sigbar"><span>Date: <strong id="today"></strong></span><button type="button" class="link" id="clearSig">Clear signature</button></div>
+        <div class="err">Please sign in the box.</div>
+      </div>
+      <div class="hp" aria-hidden="true"><label>Leave empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+    </section>
+
+    <button class="submit" id="submit" type="submit">Submit form</button>
+    <p class="foot">Stafford Foodbank · staffordshirecommunityhub@gmail.com</p>
+  </form>
+</main>
+
+<script>
+{
+/* ===== PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BETWEEN THE QUOTES (it ends with /exec) ===== */
+const SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+/* ============================================================================================ */
+
+const $ = s => document.querySelector(s);
+const f = $('#f');
+const inAppsScript = typeof google !== 'undefined' && google.script && google.script.run;
+const hasUrl = /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(SCRIPT_URL.trim());
+const isLive = inAppsScript || hasUrl;
+if (!isLive) $('#demo').style.display = 'block';
+
+const now = new Date();
+$('#today').textContent = now.toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'});
+$('#dob').max = now.toISOString().slice(0,10);
+$('#dob').min = '1900-01-01';
+
+/* --- show/hide follow-up questions --- */
+const reveals = {status:['Other','#statusOtherBox'], refugee:['Yes','#refugeeBox'], allergies:['Yes','#allergyBox'], hygiene:['Yes','#hygieneBox'], pets:['Yes','#petsBox']};
+f.addEventListener('change', e => {
+  const r = reveals[e.target.name];
+  if (r) $(r[1]).classList.toggle('on', e.target.value === r[0]);
+  const fld = e.target.closest('.field'); if (fld) fld.classList.remove('bad');
+  updateTotal();
+});
+f.addEventListener('input', e => { const fld = e.target.closest('.field'); if (fld) fld.classList.remove('bad'); updateTotal(); });
+
+/* --- household steppers --- */
+document.querySelectorAll('.step button').forEach(b => b.addEventListener('click', () => {
+  const inp = b.parentElement.querySelector('input');
+  inp.value = Math.max(0, Math.min(20, (parseInt(inp.value,10)||0) + Number(b.dataset.d)));
+  updateTotal(); b.closest('.field').classList.remove('bad');
+}));
+const num = n => Math.max(0, parseInt(f.elements[n].value,10) || 0);
+function householdTotal(){ return num('under5')+num('under10')+num('under18')+num('adults'); }
+function updateTotal(){ const t = householdTotal(); $('#total').textContent = 'Total household: ' + t + (t===1?' person':' people'); }
+
+/* --- signature pad --- */
+const cv = $('#sig'), ctx = cv.getContext('2d');
+let drawing = false, hasInk = false, last = null, strokes = [];
+function sizeCanvas(){
+  const r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+  cv.width = Math.round(r.width*d); cv.height = Math.round(r.height*d);
+  ctx.setTransform(d,0,0,d,0,0); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=2.4; ctx.strokeStyle='#111';
+  strokes.forEach(s => { ctx.beginPath(); s.forEach((p,i)=> i?ctx.lineTo(p.x*r.width,p.y*r.height):ctx.moveTo(p.x*r.width,p.y*r.height)); ctx.stroke(); });
+}
+const sigRO = new ResizeObserver(sizeCanvas); sigRO.observe(cv);
+function pt(e){ const r = cv.getBoundingClientRect(); return {x:(e.clientX-r.left), y:(e.clientY-r.top), w:r.width, h:r.height}; }
+cv.addEventListener('pointerdown', e => { e.preventDefault(); cv.setPointerCapture(e.pointerId); drawing = true; last = pt(e); strokes.push([{x:last.x/last.w,y:last.y/last.h}]); ctx.beginPath(); ctx.arc(last.x,last.y,1.2,0,7); ctx.fillStyle='#111'; ctx.fill(); });
+cv.addEventListener('pointermove', e => {
+  if (!drawing) return; const p = pt(e);
+  ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke();
+  strokes[strokes.length-1].push({x:p.x/p.w,y:p.y/p.h}); last = p; hasInk = true;
+  $('#sigwrap').closest('.field').classList.remove('bad');
+});
+['pointerup','pointercancel','pointerleave'].forEach(ev => cv.addEventListener(ev, () => drawing = false));
+$('#clearSig').addEventListener('click', () => { strokes = []; hasInk = false; ctx.clearRect(0,0,cv.width,cv.height); });
+function signaturePNG(){
+  const out = document.createElement('canvas'); out.width = cv.width; out.height = cv.height;
+  const o = out.getContext('2d'); o.fillStyle = '#fff'; o.fillRect(0,0,out.width,out.height); o.drawImage(cv,0,0);
+  return out.toDataURL('image/png');
+}
+
+/* --- validation --- */
+const val = n => { const el = f.elements[n]; return el ? String(el.value||'').trim() : ''; };
+const POSTCODE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+function validate(){
+  const bad = [];
+  if (val('name').length < 2) bad.push('name');
+  if (val('address').length < 5) bad.push('address');
+  if (!POSTCODE.test(val('postcode'))) bad.push('postcode');
+  if (!val('dob') || val('dob') > now.toISOString().slice(0,10)) bad.push('dob');
+  const digits = val('phone').replace(/\D/g,''); if (digits.length < 10 || digits.length > 13) bad.push('phone');
+  if (val('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('email'))) bad.push('email');
+  if (val('crisis').length < 3) bad.push('crisis');
+  if (!val('status') || (val('status')==='Other' && !val('statusOther'))) bad.push('status');
+  if (householdTotal() < 1) bad.push('household');
+  if (!val('refugee') || (val('refugee')==='Yes' && !(parseInt(val('refugeeCount'),10)>0))) bad.push('refugee');
+  if (!val('allergies') || (val('allergies')==='Yes' && val('allergyDetails').length < 2)) bad.push('allergies');
+  if (!val('hygiene')) bad.push('hygiene');
+  if (!val('pets')) bad.push('pets');
+  if (!f.elements.agree.checked) bad.push('agree');
+  if (!f.elements.consent.checked) bad.push('consent');
+  if (!hasInk) bad.push('signature');
+  document.querySelectorAll('.field').forEach(el => el.classList.toggle('bad', bad.includes(el.dataset.f)));
+  return bad;
+}
+
+function collect(){
+  return {
+    name: val('name'), address: val('address'), postcode: val('postcode').toUpperCase().replace(/\s+/g,' '),
+    dob: val('dob'), email: val('email'), phone: val('phone'), crisis: val('crisis'),
+    status: val('status')==='Other' ? 'Other – ' + val('statusOther') : val('status'),
+    under5: num('under5'), under10: num('under10'), under18: num('under18'), adults: num('adults'),
+    refugee: val('refugee'), refugeeCount: val('refugee')==='Yes' ? (parseInt(val('refugeeCount'),10)||0) : 0,
+    allergies: val('allergies'), allergyDetails: val('allergies')==='Yes' ? val('allergyDetails') : '',
+    hygiene: val('hygiene'), hygieneDetails: val('hygiene')==='Yes' ? val('hygieneDetails') : '',
+    pets: val('pets'), petDetails: val('pets')==='Yes' ? val('petDetails') : '',
+    further: val('further'), agree: 'Yes', consent: 'Yes',
+    signature: signaturePNG(), website: val('website')
+  };
+}
+
+function showDone(ref){
+  $('#app').innerHTML = '<div class="card done"><svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="34" fill="var(--greenbg)"/><path d="M22 37l9 9 19-20" fill="none" stroke="var(--green)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    + '<h1>Thank you — we have your form</h1><p class="lead">Your reference number is</p><div class="ref"></div>'
+    + '<p class="lead">Please keep this number. A member of the Stafford Foodbank team will be in touch about your food parcel.</p></div>';
+  $('.ref').textContent = ref;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+f.addEventListener('submit', e => {
+  e.preventDefault();
+  const bad = validate();
+  if (bad.length){
+    $('#topErr').style.display = 'block';
+    const first = document.querySelector('.field.bad');
+    if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  $('#topErr').style.display = 'none';
+  const btn = $('#submit'); btn.disabled = true; btn.textContent = 'Sending…';
+  const data = collect();
+  const fail = msg => {
+    btn.disabled = false; btn.textContent = 'Submit form';
+    const b = $('#topErr'); b.style.display = 'block';
+    b.textContent = 'Sorry, something went wrong sending your form. Please try again, or ask a member of staff. (' + (msg || 'error') + ')';
+    b.scrollIntoView({behavior:'smooth', block:'center'});
+  };
+  if (!isLive){ setTimeout(() => showDone('SFB-PREVIEW-0001'), 700); return; }
+  if (inAppsScript){
+    google.script.run
+      .withSuccessHandler(res => showDone(res && res.ref ? res.ref : ''))
+      .withFailureHandler(err => fail(err && err.message))
+      .submitForm(data);
+    return;
+  }
+  // Hosted outside Google (GitHub Pages): plain-text POST avoids CORS preflight and Google sign-in issues
+  fetch(SCRIPT_URL.trim(), {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(data), redirect:'follow'})
+    .then(r => r.json())
+    .then(res => res && res.ok ? showDone(res.ref || '') : fail(res && res.error))
+    .catch(() => fail('connection problem – please check your internet and try again'));
+});
+updateTotal();
+}
+</script>
+</body>
+</html>
